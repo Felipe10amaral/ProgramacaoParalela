@@ -117,12 +117,6 @@ class Program
             Console.WriteLine("A matriz não é ortogonal \n");
         }
 
-       // bool ehOrtogonal = VerificarMatrizOrtogonal(matriz);
-
-       /* if (ehOrtogonal)
-            Console.WriteLine("A matriz é ortogonal.");
-        else
-            Console.WriteLine("A matriz não é ortogonal."); */
     } 
 }
 
