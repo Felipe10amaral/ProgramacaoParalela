@@ -1,57 +1,70 @@
+// Felipe Amaral, Ana Carolina, Bruno Manhães e Raphael Pereira
+
 using System;
-using System.Linq;
 
 public class Program
 {
-   public static void Main()
-    {
-	   int tam = 30;
-        int[] vetor = new int[tam];
-		GerarVetorAleatorio(vetor,tam); //Chamada para gerar função de gerar Vetor aleatório
-        int[] vetorOrganizado = Organizar(vetor); //Chamada para organizar o vetor da forma desejada
+   const int TAMANHO = 20;
+   const int MAX_PAR = 10;
 
-        Console.WriteLine("\n Vetor Original:");
-        ImprimirVetor(vetor,30); //Chamada para impressão passando o vetor original
+   public static void gerarVetor(int[] vetor) {
+    
+    int i, numeroAux;
+    string aux;
+    
+    Console.WriteLine("Entre com 10  numeros pares \n");
+    for(i=0; i<MAX_PAR; i++) {
 
-        Console.WriteLine("\n Vetor organizado em ordem não-crescente:");
-        ImprimirVetor(vetorOrganizado,30); //Chamada para impressão passando o vetor organizado em ordem decrescente
+        do {
+          Console.Write($"Entre com {i + 1}º numero par: " );  
+          aux = Console.ReadLine();
+          numeroAux = int.Parse(aux);
+        } while (numeroAux % 2 != 0);
+        vetor[i] = numeroAux;
     }
 
-    static int[] GerarVetorAleatorio(int[] vetor,int tam)
-    {
-        Random random = new Random();
+    for(i=10; i<TAMANHO; i++) {
 
-        for (int i = 0; i < tam; i++)
-        {
-            vetor[i] = i + 1; // Distribui os números de 1 a 30
-        }
-
-        // Embaralha o vetor
-        for (int i = 0; i < tam - 1; i++)
-        {
-            int j = random.Next(i, tam); // j recebe pelo método random.Next valor de no min i no máximo tam
-            int aux = vetor[i]; 
-            vetor[i] = vetor[j];
-            vetor[j] = aux;
-        }
-
-        return vetor;
-	}
-
-    static int[] Organizar(int[] vetor)
-    {
-        int[] organizarVetor = vetor.ToArray(); //Transforma em array
-        Array.Sort(organizarVetor); // Utiliza o método de array para organizar em ordem crescente
-        Array.Reverse(organizarVetor); // Utiliza o método de array para reverter a ordem dos elementos
-        return organizarVetor;
+        do {
+          Console.Write($"Entre com {i - 9}º numero impar: " );  
+          aux = Console.ReadLine();
+          numeroAux = int.Parse(aux);
+        } while( numeroAux % 2 == 0);
+        vetor[i] = numeroAux;
     }
 
-    static void ImprimirVetor(int[] vetor,int tam)
-    {
-        for (int i = 0; i < tam; i++)
-        {
-            Console.Write(vetor[i] + " ");
+   }
+
+   public static void orgazinarVetor(int[] vetor) {
+    int i,j=0;
+
+    for(i=0; i<TAMANHO; i++) {
+        if(vetor[i] % 2 != 0) {
+            vetor[i] = vetor[j+1];
         }
+        
+    }
+   }
+
+   public static void imprimirVetor(int[] vetor)
+    {
+        foreach (int numero in vetor)
+            Console.Write(numero + " ");
         Console.WriteLine();
     }
+
+   public static void Main()
+    {
+	   int[] vetor = new int[TAMANHO];
+
+       gerarVetor(vetor);
+       Console.WriteLine("vetor sem organizar");
+       imprimirVetor(vetor);
+       Console.WriteLine("vetor organizado");
+       orgazinarVetor(vetor);
+       imprimirVetor(vetor);
+
+    }
+
+    
 }
