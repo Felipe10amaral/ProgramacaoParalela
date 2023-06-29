@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Felipe Amaral, Ana Carolina, Bruno Manhães e Raphael Pereira
+
+using System;
 
 public class Program
 {

@@ -1,51 +1,37 @@
-/* Considere um vetor com 50 números inteiros gerados aleatoriamente de 1 até 100. Faça um algoritmo
-recursivo para imprimir o maior valor deste vetor.
-Crie e utilize uma função para preencher o vetor e uma função recursiva para encontrar o maior valor do
-vetor. Esta informação tem que ser impressa na função main.
-Obs. 1: Não é permitido utilizar qualquer estrutura de dados auxiliar;
-Obs. 2: Não é permitido utilizar qualquer estrutura de repetição na função recursiva.
-
-*/
+// Felipe Amaral, Ana Carolina, Bruno Manhães e Raphael Pereira
 
 using System;
 
 class Program
 {
-    const int SIZE = 50;
+    const int TAMANHO = 50;
 
-    static void PreencherVetor(int[] vetor, int index)
+    public static void PreencherVetor(int[] vetor, int index)
     {
-        if (index == SIZE)
+        if (index == TAMANHO)
             return;
 
         Random random = new Random();
-        vetor[index] = random.Next(1, 101);
+        vetor[index] = random.Next(1, 101); // preenchendo valores de um a 100 aleatoriamente
 
-        PreencherVetor(vetor, index + 1);
+        PreencherVetor(vetor, index + 1); // chamando a mesma função com novos parametros
     }
 
-    static int EncontrarMaior(int[] vetor, int index, int maior)
+    public static int EncontrarMaior(int[] vetor, int index, int maior)
     {
-        if (index == SIZE)
+        if (index == TAMANHO) // compara se o valor atual do teste é igual ao tamanho maximo
             return maior;
 
-        if (vetor[index] > maior)
+        if (vetor[index] > maior) // teste para identificar o maior numero dentro do elemento de um vetor
             maior = vetor[index];
 
-        return EncontrarMaior(vetor, index + 1, maior);
+        return EncontrarMaior(vetor, index + 1, maior); // retorna o mesmo vetor com o valor o indice atualizado e chamando a mesma função com novos parametros
     }
 
     static void Main(string[] args)
     {
-        int[] vetor = new int[SIZE];
+        int[] vetor = new int[TAMANHO];
         PreencherVetor(vetor, 0);
-
-        Console.Write("Valores do vetor: ");
-        foreach (int num in vetor)
-        {
-            Console.Write(num + " ");
-        }
-        Console.WriteLine();
 
         int maiorValor = EncontrarMaior(vetor, 0, 0);
 
