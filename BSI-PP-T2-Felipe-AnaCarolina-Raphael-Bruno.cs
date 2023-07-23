@@ -20,10 +20,13 @@ public class T2
         Thread t3 = new Thread(() => divisao(numero1, numero2));
         Thread t4 = new Thread(() => multiplicacao(numero1, numero2));
 
+        // iniciando as threads
         t1.Start();
         t2.Start();
         t3.Start();
         t4.Start(); 
+
+        // Aguardando todas as threads terminarem de executar
         t1.Join();
         t2.Join();
         t3.Join();
@@ -35,11 +38,11 @@ public class T2
         int result, tempo;
         Random random = new Random();
         result = a + b;
-        tempo = random.Next(1, 21);
+        tempo = random.Next(1, 21); // numeros aleatorios de 1 a 20
 
         Console.WriteLine($"Eu sou a Thread SOMA ({result})  e vou dormir por {tempo} segundos!");
 
-        Thread.Sleep(tempo * 1000); // converter o tempo de segundos para milisegundos
+        Thread.Sleep(tempo * 1000); // converter o tempo de segundos para milisegundos (Sleep: tempo de espera da thread)
         
         Console.WriteLine($"Eu sou a Thread SOMA ({result}). Já se passaram {tempo} segundos, então terminei!");
 
@@ -49,11 +52,11 @@ public class T2
         int result, tempo;
         Random random = new Random();
         result = a - b;
-        tempo = random.Next(1, 21);
+        tempo = random.Next(1, 21);  // numeros aleatorios de 1 a 20
 
         Console.WriteLine($"Eu sou a Thread SUBTRACAO ({result})  e vou dormir por {tempo} segundos!");
 
-        Thread.Sleep(tempo * 1000); // converter o tempo de segundos para milisegundos
+        Thread.Sleep(tempo * 1000); // converter o tempo de segundos para milisegundos (Sleep: tempo de espera da thread)
         
         Console.WriteLine($"Eu sou a Thread SUBTRACAO ({result}). Já se passaram {tempo} segundos, então terminei!");
 
@@ -63,11 +66,11 @@ public class T2
         int result, tempo;
         Random random = new Random();
         result = a / b;
-        tempo = random.Next(1, 21);
+        tempo = random.Next(1, 21); // numeros aleatorios de 1 a 20
 
         Console.WriteLine($"Eu sou a Thread DIVISAO ({result})  e vou dormir por {tempo} segundos!");
 
-        Thread.Sleep(tempo * 1000); // converter o tempo de segundos para milisegundos
+        Thread.Sleep(tempo * 1000); // converter o tempo de segundos para milisegundos (Sleep: tempo de espera da thread)
         
         Console.WriteLine($"Eu sou a Thread DIVISAO ({result}). Já se passaram {tempo} segundos, então terminei!");
 
@@ -77,11 +80,11 @@ public class T2
         int result, tempo;
         Random random = new Random();
         result = a * b;
-        tempo = random.Next(1, 21);
+        tempo = random.Next(1, 21); // numeros aleatorios de 1 a 20
 
         Console.WriteLine($"Eu sou a Thread MULTIPLICACAO ({result})  e vou dormir por {tempo} segundos!");
 
-        Thread.Sleep(tempo * 1000); // converter o tempo de segundos para milisegundos
+        Thread.Sleep(tempo * 1000); // converter o tempo de segundos para milisegundos (Sleep: tempo de espera da thread)
         
         Console.WriteLine($"Eu sou a Thread MULTIPLICACAO ({result}). Já se passaram {tempo} segundos, então terminei!");
 
