@@ -13,8 +13,8 @@ class T4
         int[] b = { 2, -3, 1 };
         int[] x = new int[3];
 
-        Thread t1 = new Thread(() => Semaforo(matriz, x, b));
-        Thread t2 = new Thread(() => Semaforo(matriz, x, b));
+        Thread t1 = new Thread(() => calcSistema(matriz, x, b));
+        Thread t2 = new Thread(() => print(matriz));
 
         // Iniciando ambas as threads
         t1.Start();
@@ -32,47 +32,53 @@ class T4
         Console.WriteLine("Terminado \n");
     }
 
-    public static void Semaforo(int[,] matriz, int[] x, int[] b)
-    {
-        semaforoSistema.Wait();
-        CalcSistema(matriz, x, b);
-        semaforoSistema.Release();
 
+    public static void print(int[,] matriz) {
+        
         semaforoSomatorio.Wait();
-        CalcSomatorio(matriz, x, b);
-        semaforoSomatorio.Release();
+        int i,j;
+        for(i=0; i<LINHA; i++)
+        {
+            for(j=0; j<LINHA; j++)
+            {
+              Console.Write(matriz[i, j] + "\t"); 
+            }
+          Console.WriteLine(); // metodo para pular linha (para imprimir na tela)
+        }
     }
 
-    public static void CalcSistema(int[,] matriz, int[] x, int[] b)
-    {
-        int i, j, somatorio = 0;
-
+    public static void calcSistema(int[,] matriz, int[] x, int[] b) {
+        int i, j;
+        
         for (i = 0; i < LINHA; i++)
         {
+            int somatorio = 0;
             for (j = 0; j < i; j++)
             {
                 somatorio += matriz[i, j] * x[j];
             }
             x[i] = (b[i] - somatorio) / matriz[i, i];
-            somatorio = 0;
         }
+        
+        semaforoSomatorio.Release();
+        Console.WriteLine("feito \n");
     }
 
     public static void CalcSomatorio(int[,] matriz, int[] x, int[] b)
     {
-        semaforoSistema.Wait();
-        int i, j, somatorio = 0;
+       
+        int i, j;
 
         for (i = 0; i < LINHA; i++)
         {
-            for (j = 0; j < i; j++)
+            int somatorio = 0;
+            for (j = 0; j < LINHA; j++)
             {
                 somatorio += matriz[i, j] * x[j];
             }
             x[i] = (b[i] - somatorio) / matriz[i, i];
-            somatorio = 0;
         }
 
-        semaforoSistema.Release();
+        
     }
 }
