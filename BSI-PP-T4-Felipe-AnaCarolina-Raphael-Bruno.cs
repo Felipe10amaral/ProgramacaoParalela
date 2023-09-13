@@ -12,18 +12,18 @@ class T4
         int[,] matriz = { { 2, 0, 0 }, { 1, 4, 0 }, { 1, 1, 1 } };
         int[] b = { 2, -3, 1 };
         int[] x = new int[LINHA];
+        int i;
 
         Thread t1 = new Thread(() => CalcularSistema(matriz, x, b));
         Thread t2 = new Thread(() => CalcularSomatorio(matriz, x));
 
-    
         t1.Start();
         t2.Start();
 
         t1.Join();
         t2.Join();
 
-        for (int i = 0; i < LINHA; i++)
+        for (i = 0; i < LINHA; i++)
         {
             Console.WriteLine($"X{i}: {x[i]}");
         }
@@ -33,23 +33,31 @@ class T4
 
     public static void CalcularSistema(int[,] matriz, int[] x, int[] b)
     {
-        for (int i = 0; i < LINHA; i++)
+        int i;
+        for (i = 0; i < LINHA; i++)
         {
             semaforoSistema.Wait(); // Aguarda permissão para cálculos
-            int somatorio = CalcularSomatorio(matriz, x, i); // Passa o i como parâmetro para poder passar a linha em qual esta o contexto da iteração
-            x[i] = (b[i] - somatorio) / matriz[i, i];
+            x[i] = (b[i] - x[i]) / matriz[i, i]; // Usa x[i] como somatório
             semaforoSomatorio.Release(); // Libera a thread t2 para o próximo cálculo
         }
     }
 
-    public static int CalcularSomatorio(int[,] matriz, int[] x, int i = 0)
+    public static void CalcularSomatorio(int[,] matriz, int[] x)
     {
-        int somatorio = 0;
-        for (int j = 0; j < i; j++)
+        int i,j;
+        for (i = 0; i < LINHA; i++)
         {
-            somatorio += (matriz[i, j] * x[j]);
+            int tempSomatorio = 0;
+            for (j = 0; j < i; j++)
+            {
+                tempSomatorio += (matriz[i, j] * x[j]);
+            }
+            x[i] = tempSomatorio;
+            semaforoSistema.Release(); // Libera o semáforo para o cálculo da próxima linha
+            if (i < LINHA - 1)
+            {
+                semaforoSomatorio.Wait(); // Aguarda a thread t1 calcular x[i+1]
+            }
         }
-        semaforoSistema.Release(); // Libera o semáforo para o cálculo da próxima linha
-        return somatorio;
     }
 }
