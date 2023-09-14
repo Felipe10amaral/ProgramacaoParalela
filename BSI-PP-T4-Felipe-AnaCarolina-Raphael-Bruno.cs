@@ -17,12 +17,15 @@ class T4
         Thread t1 = new Thread(() => CalcularSistema(matriz, x, b));
         Thread t2 = new Thread(() => CalcularSomatorio(matriz, x));
 
+        // iniciando as threads
         t1.Start();
         t2.Start();
 
+        // aguardando as threads executarem
         t1.Join();
         t2.Join();
 
+        // imprimindo o resultado
         for (i = 0; i < LINHA; i++)
         {
             Console.WriteLine($"X{i}: {x[i]}");
@@ -37,27 +40,21 @@ class T4
         for (i = 0; i < LINHA; i++)
         {
             semaforoSistema.Wait(); // Aguarda permissão para cálculos
-            x[i] = (b[i] - x[i]) / matriz[i, i]; // Usa x[i] como somatório
+            int somatorio = CalcularSomatorio(matriz, x, i); // Passa o i como parâmetro
+            x[i] = (b[i] - somatorio) / matriz[i, i];
             semaforoSomatorio.Release(); // Libera a thread t2 para o próximo cálculo
         }
     }
 
-    public static void CalcularSomatorio(int[,] matriz, int[] x)
+    public static int CalcularSomatorio(int[,] matriz, int[] x, int i = 0)
     {
-        int i,j;
-        for (i = 0; i < LINHA; i++)
+        int j;
+        int somatorio = 0;
+        for (j = 0; j < i; j++)
         {
-            int tempSomatorio = 0;
-            for (j = 0; j < i; j++)
-            {
-                tempSomatorio += (matriz[i, j] * x[j]);
-            }
-            x[i] = tempSomatorio;
-            semaforoSistema.Release(); // Libera o semáforo para o cálculo da próxima linha
-            if (i < LINHA - 1)
-            {
-                semaforoSomatorio.Wait(); // Aguarda a thread t1 calcular x[i+1]
-            }
+            somatorio = somatorio + (matriz[i, j] * x[j]);
         }
+        semaforoSistema.Release(); // Libera o semáforo para o cálculo da próxima linha
+        return somatorio;
     }
 }
