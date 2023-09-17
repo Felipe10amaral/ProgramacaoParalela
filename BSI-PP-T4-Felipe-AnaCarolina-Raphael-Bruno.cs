@@ -4,6 +4,8 @@ using System.Threading;
 public class T4
 {
     const int LINHA = 3;
+     public static SemaphoreSlim semaforoSoma = new SemaphoreSlim(1);
+     public static SemaphoreSlim semaforoSistema = new SemaphoreSlim(0);
 
     public static void Main(string[] args)
     {
@@ -12,11 +14,8 @@ public class T4
         int[] x = new int[LINHA];
         int i;
 
-        SemaphoreSlim semaforoSoma = new SemaphoreSlim(1);
-        SemaphoreSlim semaforoSistema = new SemaphoreSlim(0);
-
-        Thread t1 = new Thread(() => CalculaSoma(matriz, x, semaforoSoma, semaforoSistema));
-        Thread t2 = new Thread(() => CalculaSistema(matriz, x, b, semaforoSoma, semaforoSistema));
+        Thread t1 = new Thread(() => CalculaSoma(matriz, x, semaforoSoma));
+        Thread t2 = new Thread(() => CalculaSistema(matriz, x, b, semaforoSistema));
 
         // iniciando as threads
         t1.Start();
@@ -33,13 +32,13 @@ public class T4
         }
     }
 
-    public static void CalculaSoma(int[,] matriz, int[] x, SemaphoreSlim semaforoSoma, SemaphoreSlim semaforoSistema)
+    public static void CalculaSoma(int[,] matriz, int[] x, SemaphoreSlim semaforoSoma)
     {
         int i,j,soma;
 
         for (i = 0; i < LINHA; i++)
         {
-            semaforoSoma.Wait();
+            semaforoSoma.Wait(); //Aguarda o semáforoSoma t1
             soma = 0;
             for (j = 0; j < LINHA; j++)
             {
@@ -50,14 +49,14 @@ public class T4
         }
     }
 
-    public static void CalculaSistema(int[,] matriz, int[] x, int[] b, SemaphoreSlim semaforoT1, SemaphoreSlim semaforoT2)
+    public static void CalculaSistema(int[,] matriz, int[] x, int[] b, SemaphoreSlim semaforoSistema)
     {
         int i;
         for (i = 0; i < LINHA; i++)
         {
-            semaforoT2.Wait();
+            semaforoSistema.Wait(); // aguarda o semaforoSistema t2
             x[i] = (b[i] - x[i]) / matriz[i, i]; // Calcula o sistema
-            semaforoT1.Release(); // Libera t1 para calcular o próximo somatório
+            semaforoSoma.Release(); // Libera t1 para calcular o próximo somatório
         }
     }
 }
